@@ -159,6 +159,9 @@ Decrease font size.
 .B Ctrl-Shift-Home
 Reset to default font size.
 .TP
+.B Ctrl-Shift-Return
+Spawn a new terminal in the current working directory.
+.TP
 .B Ctrl-Shift-y
 Paste from primary selection (middle mouse button).
 .TP
@@ -171,6 +174,13 @@ Paste from the clipboard selection.
 .B st
 can be customized by creating a custom config.h and (re)compiling the source
 code. This keeps it fast, secure and simple.
+.P
+Some options can be alternatively customized through
+.B Xresources
+with
+.B st
+prefix. See the source code for which settings can be provided through this
+method.
 .SH AUTHORS
 See the LICENSE file for the authors.
 .SH LICENSE
@@ -179,7 +189,8 @@ See the LICENSE file for the terms of redistribution.
 .BR tabbed (1),
 .BR utmp (1),
 .BR stty (1),
-.BR scroll (1)
+.BR scroll (1),
+.BR xrdb (1)
 .SH BUGS
 See the TODO file in the distribution.
 
