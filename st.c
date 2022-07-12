@@ -1093,7 +1093,9 @@ tswapscreen(void)
 void
 kscrolldown(const Arg* a)
 {
-	int n = a->i;
+	int n = (mousescrollincrement > a->i)
+		? mousescrollincrement
+		: a->i;
 
 	if (n < 0)
 		n = term.row + n;
@@ -1111,7 +1113,9 @@ kscrolldown(const Arg* a)
 void
 kscrollup(const Arg* a)
 {
-	int n = a->i;
+	int n = (mousescrollincrement > a->i)
+		? mousescrollincrement
+		: a->i;
 
 	if (n < 0)
 		n = term.row + n;
