@@ -950,7 +950,7 @@ ttyresize(int tw, int th)
 }
 
 void
-ttyhangup()
+ttyhangup(void)
 {
 	/* Send SIGHUP to shell */
 	kill(pid, SIGHUP);
@@ -2011,7 +2011,6 @@ strhandle(void)
 		case 12:
 			if (narg < 2)
 				break;
-
 			p = strescseq.args[1];
 			if ((j = par - 10) < 0 || j >= LEN(osc_table))
 				break; /* shouldn't be possible */
