@@ -6,7 +6,6 @@
  * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
  */
 static char *font = "Liberation Mono:pixelsize=12:antialias=true:autohint=true";
-static char *font2 = "Roboto Mono for Powerline:pixelsize=12:antialias=true:autohint=true";
 static int borderpx = 2;
 
 /*
@@ -136,20 +135,13 @@ unsigned int defaultcs = 256;
 static unsigned int defaultrcs = 257;
 
 /*
- * https://invisible-island.net/xterm/ctlseqs/ctlseqs.html#h4-Functions-using-CSI-_-ordered-by-the-final-character-lparen-s-rparen:CSI-Ps-SP-q.1D81
- * Default style of cursor
- * 0: Blinking block
- * 1: Blinking block (default)
- * 2: Steady block ("█")
- * 3: Blinking underline
- * 4: Steady underline ("_")
- * 5: Blinking bar
- * 6: Steady bar ("|")
- * 7: Blinking st cursor
- * 8: Steady st cursor
+ * Default shape of cursor
+ * 2: Block ("█")
+ * 4: Underline ("_")
+ * 6: Bar ("|")
+ * 7: Snowman ("☃")
  */
-static unsigned int cursorstyle = 1;
-static Rune stcursor = 0x2603; /* snowman (U+2603) */
+static unsigned int cursorshape = 2;
 
 /*
  * Default columns and rows numbers
@@ -183,7 +175,6 @@ static uint forcemousemod = ShiftMask;
  */
 ResourcePref resources[] = {
 		{ "font",         STRING,  &font },
-		{ "font2",        STRING,  &font2 },
 		{ "color0",       STRING,  &colorname[0] },
 		{ "color1",       STRING,  &colorname[1] },
 		{ "color2",       STRING,  &colorname[2] },
@@ -206,34 +197,25 @@ ResourcePref resources[] = {
 		{ "background",   STRING,  &colorname[259] },
 		{ "termname",     STRING,  &termname },
 		{ "shell",        STRING,  &shell },
-		{ "doubleclicktimeout",INTEGER,&doubleclicktimeout },
-		{ "tripleclicktimeout",INTEGER,&tripleclicktimeout },
-		{ "allowaltscreen",INTEGER,&allowaltscreen },
-		{ "allowwindowops",INTEGER,&allowwindowops },
 		{ "minlatency",   INTEGER, &minlatency },
 		{ "maxlatency",   INTEGER, &maxlatency },
 		{ "blinktimeout", INTEGER, &blinktimeout },
-		{ "cursorthickness",INTEGER,&cursorthickness },
-		{ "cursorstyle",  INTEGER, &cursorstyle },
 		{ "bellvolume",   INTEGER, &bellvolume },
 		{ "tabspaces",    INTEGER, &tabspaces },
 		{ "borderpx",     INTEGER, &borderpx },
 		{ "cwscale",      FLOAT,   &cwscale },
 		{ "chscale",      FLOAT,   &chscale },
-		{ "cols",         INTEGER, &cols },
-		{ "rows",         INTEGER, &rows },
-		{ "mousescrollincrement",INTEGER,&mousescrollincrement },
 };
 
 /*
  * Internal mouse shortcuts.
  * Beware that overloading Button1 will disable the selection.
  */
-unsigned int mousescrollincrement = 1;
+const unsigned int mousescrollincrement = 4;
 static MouseShortcut mshortcuts[] = {
 	/* mask                 button   function        argument       release */
-	{ XK_ANY_MOD,           Button4, kscrollup,      {.i = 1},		0, /* !alt */ -1 },
-	{ XK_ANY_MOD,           Button5, kscrolldown,    {.i = 1},		0, /* !alt */ -1 },
+	{ XK_ANY_MOD,           Button4, kscrollup,      {.i = mousescrollincrement},		0, /* !alt */ -1 },
+	{ XK_ANY_MOD,           Button5, kscrolldown,    {.i = mousescrollincrement},		0, /* !alt */ -1 },
 	{ XK_ANY_MOD,           Button2, selpaste,       {.i = 0},      1 },
 	{ ShiftMask,            Button4, ttysend,        {.s = "\033[5;2~"} },
 	{ XK_ANY_MOD,           Button4, ttysend,        {.s = "\031"} },
@@ -339,7 +321,7 @@ static Key key[] = {
 	{ XK_KP_Delete,     ControlMask,    "\033[3;5~",    +1,    0},
 	{ XK_KP_Delete,     ShiftMask,      "\033[2K",      -1,    0},
 	{ XK_KP_Delete,     ShiftMask,      "\033[3;2~",    +1,    0},
-	{ XK_KP_Delete,     XK_ANY_MOD,     "\033[3~",       -1,    0},
+	{ XK_KP_Delete,     XK_ANY_MOD,     "\033[P",       -1,    0},
 	{ XK_KP_Delete,     XK_ANY_MOD,     "\033[3~",      +1,    0},
 	{ XK_KP_Multiply,   XK_ANY_MOD,     "\033Oj",       +2,    0},
 	{ XK_KP_Add,        XK_ANY_MOD,     "\033Ok",       +2,    0},
@@ -407,7 +389,7 @@ static Key key[] = {
 	{ XK_Delete,        ControlMask,    "\033[3;5~",    +1,    0},
 	{ XK_Delete,        ShiftMask,      "\033[2K",      -1,    0},
 	{ XK_Delete,        ShiftMask,      "\033[3;2~",    +1,    0},
-	{ XK_Delete,        XK_ANY_MOD,     "\033[3~",       -1,    0},
+	{ XK_Delete,        XK_ANY_MOD,     "\033[P",       -1,    0},
 	{ XK_Delete,        XK_ANY_MOD,     "\033[3~",      +1,    0},
 	{ XK_BackSpace,     XK_NO_MOD,      "\177",          0,    0},
 	{ XK_BackSpace,     Mod1Mask,       "\033\177",      0,    0},
